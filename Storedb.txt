@@ -1,0 +1,133 @@
+mysql> create database entreprise_vente;
+Query OK, 1 row affected (0.10 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| centre_formation   |
+| entreprise_vente   |
+| information_schema |
+| isgi               |
+| mobile             |
+| mysql              |
+| performance_schema |
+| sys                |
+| ziad               |
++--------------------+
+9 rows in set (0.00 sec)
+
+mysql> create table clients(
+    -> nom varchar(10),
+    -> prenom varchar(10),
+    -> email varchar(20),
+    -> adresse varchar(40),
+    -> adresse varchar(40),rfgrefg;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 6
+mysql> create table clients(
+    -> id_client int primary key,
+    -> nom varchar(10),
+    -> prenom varchar(10),
+    -> email varchar(20),
+    -> adresse varchar(40),
+    -> telephone varchar(13));
+ERROR 1046 (3D000): No database selected
+mysql> use entreprise_vente;
+Database changed
+mysql> create table clients(
+    -> id_client int primary key,
+    -> nom varchar(10),
+    -> prenom varchar(10),
+    -> email varchar(20),
+    -> adresse varchar(40),
+    -> telephone varchar(13));
+Query OK, 0 rows affected (0.34 sec)
+
+mysql> desc clients;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| id_client | int         | NO   | PRI | NULL    |       |
+| nom       | varchar(10) | YES  |     | NULL    |       |
+| prenom    | varchar(10) | YES  |     | NULL    |       |
+| email     | varchar(20) | YES  |     | NULL    |       |
+| adresse   | varchar(40) | YES  |     | NULL    |       |
+| telephone | varchar(13) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql> create table produits(
+    -> id_produit int primary key,
+    -> nom varchar(20),
+    -> description varchar(50),
+    -> prix decimal(10,3),
+    -> stock varchar(20));
+Query OK, 0 rows affected (0.56 sec)
+
+mysql> desc produits;
++-------------+---------------+------+-----+---------+-------+
+| Field       | Type          | Null | Key | Default | Extra |
++-------------+---------------+------+-----+---------+-------+
+| id_produit  | int           | NO   | PRI | NULL    |       |
+| nom         | varchar(20)   | YES  |     | NULL    |       |
+| description | varchar(50)   | YES  |     | NULL    |       |
+| prix        | decimal(10,3) | YES  |     | NULL    |       |
+| stock       | varchar(20)   | YES  |     | NULL    |       |
++-------------+---------------+------+-----+---------+-------+
+5 rows in set (0.02 sec)
+
+mysql> create table commandes(
+    -> id_commande int primary key,
+    -> id_client int foreign key (id_client) references clients(id_client));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'foreign key (id_client) references clients(id_client))' at line 3
+mysql> create table commandes(
+    -> foreign key (id_client) references clients(id_client));
+ERROR 1113 (42000): A table must have at least 1 column
+mysql> create table commandes(
+    -> id_commande int primary key,
+    -> id_client int ,
+    -> date_commande date,
+    -> statut varchar(10),
+    -> total decimal(40,4));
+Query OK, 0 rows affected (0.34 sec)
+
+mysql> desc commandes;
++---------------+---------------+------+-----+---------+-------+
+| Field         | Type          | Null | Key | Default | Extra |
++---------------+---------------+------+-----+---------+-------+
+| id_commande   | int           | NO   | PRI | NULL    |       |
+| id_client     | int           | YES  |     | NULL    |       |
+| date_commande | date          | YES  |     | NULL    |       |
+| statut        | varchar(10)   | YES  |     | NULL    |       |
+| total         | decimal(40,4) | YES  |     | NULL    |       |
++---------------+---------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> altertable commandes
+    -> sdx;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'altertable commandes
+sdx' at line 1
+mysql> alter table commandes
+    -> add foreign key(id_client) references clients (id_client);
+Query OK, 0 rows affected (1.54 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc commandes;
++---------------+---------------+------+-----+---------+-------+
+| Field         | Type          | Null | Key | Default | Extra |
++---------------+---------------+------+-----+---------+-------+
+| id_commande   | int           | NO   | PRI | NULL    |       |
+| id_client     | int           | YES  | MUL | NULL    |       |
+| date_commande | date          | YES  |     | NULL    |       |
+| statut        | varchar(10)   | YES  |     | NULL    |       |
+| total         | decimal(40,4) | YES  |     | NULL    |       |
++---------------+---------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> alter table commandes
+    -> add check(statut=en cours or statut=livrée or statut=annulée);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'cours or statut=livrée or statut=annulée)' at line 2
+mysql> alter table commandes
+    -> add check(statut='en cours' or statut='livrée' or statut='annulée');
+Query OK, 0 rows affected (1.48 sec)
+Records: 0  Duplicates: 0  Warnings: 0
